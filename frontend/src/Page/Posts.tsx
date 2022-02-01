@@ -47,6 +47,7 @@ const Posts = () => {
 
   return (
     <>
+      <div style={{height: "5vh"}}>a</div>
       <BtnContainer>
         <Btn onClick={toUpdate}>글쓰기</Btn>
         <SearchContainer>
