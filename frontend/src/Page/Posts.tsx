@@ -3,64 +3,49 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 
-interface Ipost {
+interface Imember {
   id: number;
   name: string;
+}
+
+interface Ipost {
+  id: number;
   title: string;
   content: string;
+  author: Imember;
 }
 
 const PostContainer = styled.div`
   flex: 1;
   padding: 0 20%;
   overflow-y: scroll;
-`
+`;
 
 const Posts = () => {
   const [postList, setPostList] = useState<Ipost[]>([]);
-  const [memberName, setMemberName] = useState("");
-  const [findName, setFindName] = useState("");
+  const [title, setTitle] = useState("");
+  const [findTitle, setFindTitle] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // 요청 보내서 받아와야함
-    // 더미 데이터
-    setPostList([
-      { id: 0, name: "00", title: "0000", content: "0000000" },
-      { id: 1, name: "11", title: "1111", content: "1111111" },
-      { id: 2, name: "22", title: "2222", content: "2222222" },
-      { id: 3, name: "33", title: "3333", content: "3333333" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-      { id: 4, name: "44", title: "4444", content: "4444444" },
-    ]);
-  }, []);
-
-  const setName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMemberName(e.target.value);
+  const getPostList = async () => {
+    const flag = findTitle ? `/${findTitle}` : "";
+    const url = "http://localhost:8080/posts".concat(flag);
+    const res = await fetch(url);
+    const ret = await res.json();
+    setPostList(ret);
   };
 
-  const findByName = () => {
-    setFindName(memberName);
-    setMemberName("");
+  useEffect(() => {
+    getPostList();
+  }, [findTitle]);
+
+  const setName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
+  const findByName = async () => {
+    setFindTitle(title);
+    setTitle("");
   };
 
   const findByPost = (post: Ipost) => {
@@ -75,14 +60,18 @@ const Posts = () => {
     <PostContainer>
       <BtnContainer>
         <SearchContainer>
-          <input type={"text"} value={memberName} onChange={setName} style={{flex: "1", background: "#FFF"}}></input>
+          <input
+            type={"text"}
+            value={title}
+            onChange={setName}
+            style={{ flex: "1", background: "#FFF" }}
+          ></input>
           <Btn onClick={findByName}> 검색</Btn>
         </SearchContainer>
         <Btn onClick={toUpdate}>글쓰기</Btn>
       </BtnContainer>
       <ul>
         {postList.map((post: Ipost) => {
-          if (findName !== "" && post.name !== findName) return null;
           return (
             <li
               key={post.id}
@@ -91,8 +80,18 @@ const Posts = () => {
               }}
             >
               <PostElem>
-                <div style={{display:"flex", alignItems:"center"}}>제목: {post.title}</div>
-                <div style={{display:"flex", alignItems:"center", minWidth:"10vw"}}>작성자: {post.name}</div>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  제목: {post.title}
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    minWidth: "10vw",
+                  }}
+                >
+                  작성자: {post.author.name}
+                </div>
               </PostElem>
             </li>
           );
