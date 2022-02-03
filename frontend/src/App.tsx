@@ -12,17 +12,11 @@ import { Signup } from "./Page/Signup";
 
 function App() {
 
-  const [isLogin, setIsLogin] = useState(false)
-
-  const LoginHandler = () => {
-    setIsLogin(!isLogin)
-  }
-
   return (
     <BrowserRouter>
       <Header/>
       <Routes>
-        <Route path="/" element={isLogin ? <Home /> : <Login LoginHandler={LoginHandler}/>} />
+        <Route path="/" element={<Home />}/>
         <Route path="/members" element={<Members />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/posts" element={<Posts />} />

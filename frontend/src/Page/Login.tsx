@@ -80,7 +80,7 @@ export const Login = ({LoginHandler}: Iprops) => {
 
   return (
     <LoginContainer>
-      <div style={{height:"5vh"}}>a</div>
+      <div style={{height:"7vh"}}>a</div>
       <LoginBox>
         <InputBox>
           <InputTitle>아이디 :</InputTitle>

@@ -84,7 +84,7 @@ export const Signup = () => {
 
   return (
     <SignupContainer>
-      <div style={{height: "5vh"}}>a</div>
+      <div style={{height: "7vh"}}>a</div>
       <SignupBody>
         <InputBox>
           <InputTitle>아이디 :</InputTitle>
