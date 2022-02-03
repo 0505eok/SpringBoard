@@ -6,6 +6,12 @@ interface Imember {
   name: string;
 }
 
+const MemberContainer = styled.div`
+  flex: 1;
+  padding: 0% 15%;
+  overflow-y: scroll;
+`
+
 const Members = () => {
   const [name, setName] = useState("");
   const [memberList, setMemberList] = useState<Imember[]>([]);
@@ -43,7 +49,7 @@ const Members = () => {
   };
 
   return (
-    <>
+    <MemberContainer>
       <AddMember>
         <input type="text" onChange={addName} value={name} />
         <button onClick={click}>등록</button>
@@ -55,7 +61,7 @@ const Members = () => {
           })}
         </ul>
       </MemberList>
-    </>
+    </MemberContainer>
   );
 };
 
