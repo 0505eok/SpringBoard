@@ -24,6 +24,9 @@ public class Post {
     @Column(length = 200)
     private String content;
 
+    @Column(name="author")
+    private Long auth;
+
     @ManyToOne
     @JoinColumn(name="author", insertable = false, updatable = false)
     private Member author;

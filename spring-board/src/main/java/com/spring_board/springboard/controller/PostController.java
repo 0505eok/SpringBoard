@@ -36,7 +36,7 @@ public class PostController {
         Post post = new Post();
         post.setTitle(postForm.title);
         post.setContent(postForm.content);
-        //post.setAuthor(postForm.author);
+        post.setAuth(postForm.author);
         postService.create(post);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
