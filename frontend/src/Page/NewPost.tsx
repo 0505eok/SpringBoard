@@ -37,13 +37,13 @@ const NewPost = () => {
   };
 
   return (
-    <>
+    <div style={{padding: "7% 15% 0 15%"}}>
       <div>
         제목
         <input type={"text"} value={title} onChange={changeTitle}></input>
       </div>
       <div>
-        작성자
+        username
         <input type={"text"} value={name} onChange={changeName}></input>
       </div>
       <div>
@@ -57,7 +57,7 @@ const NewPost = () => {
       >
         저장
       </Btn>
-    </>
+    </div>
   );
 };
 
