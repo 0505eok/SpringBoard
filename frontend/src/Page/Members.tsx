@@ -10,14 +10,14 @@ const MemberContainer = styled.div`
   flex: 1;
   padding: 0% 15%;
   overflow-y: scroll;
-`
+`;
 
 const Members = () => {
   const [name, setName] = useState("");
   const [memberList, setMemberList] = useState<Imember[]>([]);
 
   const getMemberList = async () => {
-    const res = await fetch("http://localhost:8080/members");
+    const res = await fetch("http://13.124.246.173:8080/members");
     const ret = await res.json();
     setMemberList(ret);
   };
@@ -32,7 +32,7 @@ const Members = () => {
 
   const click = async () => {
     // 멤버 등록해서 백엔드로 보내야함
-    const res = await fetch("http://localhost:8080/members", {
+    const res = await fetch("http://13.124.246.173:8080/members", {
       method: "POST",
       headers: {
         "Content-type": "application/json;charset=utf-8",

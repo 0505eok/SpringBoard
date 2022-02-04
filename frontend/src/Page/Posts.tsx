@@ -12,6 +12,7 @@ interface Ipost {
   id: number;
   title: string;
   content: string;
+  auth: number;
   author: Imember;
 }
 
@@ -22,14 +23,22 @@ const PostContainer = styled.div`
 `;
 
 const Posts = () => {
-  const [postList, setPostList] = useState<Ipost[]>([{id: 1, title: 'asd', author: {id: 1, name: 'me'}, content: 'asdasdasd'}]);
+  const [postList, setPostList] = useState<Ipost[]>([
+    {
+      id: 1,
+      title: "asd",
+      author: { id: 1, name: "me" },
+      content: "asdasdasd",
+      auth: 1,
+    },
+  ]);
   const [title, setTitle] = useState("");
   const [findTitle, setFindTitle] = useState("");
   const navigate = useNavigate();
 
   const getPostList = async () => {
     const flag = findTitle ? `/${findTitle}` : "";
-    const url = "http://localhost:8080/posts".concat(flag);
+    const url = "http://13.124.246.173:8080/posts".concat(flag);
     const res = await fetch(url);
     const ret = await res.json();
     setPostList(ret);

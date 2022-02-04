@@ -10,6 +10,7 @@ interface Ipost {
   id: number;
   author: Imember;
   title: string;
+  auth: number;
   content: string;
 }
 

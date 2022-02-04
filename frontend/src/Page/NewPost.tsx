@@ -2,11 +2,17 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 
-interface Ipost {
+interface Imember {
   id: number;
   name: string;
+}
+
+interface Ipost {
+  id: number;
   title: string;
   content: string;
+  auth: number;
+  author: Imember;
 }
 
 const NewPost = () => {
@@ -17,9 +23,9 @@ const NewPost = () => {
 
   useEffect(() => {
     if (location !== null) {
-      const { name, title, content } = location;
+      const { author, title, content } = location;
       setTitle(title);
-      setName(name);
+      setName(author.name);
       setContent(content);
     }
   }, []);
@@ -37,7 +43,7 @@ const NewPost = () => {
   };
 
   return (
-    <div style={{padding: "7% 15% 0 15%"}}>
+    <div style={{ padding: "7% 15% 0 15%" }}>
       <div>
         제목
         <input type={"text"} value={title} onChange={changeTitle}></input>
