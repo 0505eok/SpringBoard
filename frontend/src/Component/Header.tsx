@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { NavLink } from "react-router-dom";
 
 const HeaderContainer = styled.div`
   position: fixed;
@@ -18,7 +19,9 @@ const HeaderContainer = styled.div`
 export const Header = () => {
   return (
     <HeaderContainer className="white">
-      Header
+      <NavLink to='/'>
+        Header
+      </NavLink>
     </HeaderContainer>
   )
 }

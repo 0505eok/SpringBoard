@@ -22,7 +22,7 @@ const PostContainer = styled.div`
 `;
 
 const Posts = () => {
-  const [postList, setPostList] = useState<Ipost[]>([]);
+  const [postList, setPostList] = useState<Ipost[]>([{id: 1, title: 'asd', author: {id: 1, name: 'me'}, content: 'asdasdasd'}]);
   const [title, setTitle] = useState("");
   const [findTitle, setFindTitle] = useState("");
   const navigate = useNavigate();
