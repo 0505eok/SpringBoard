@@ -22,6 +22,9 @@ public class Member {
     @Column(length = 200)
     private String name;
 
+    @Column(length = 200, name="pwd")
+    private String password;
+
     @JsonIgnore
     @OneToMany(mappedBy = "author")
     private List<Post> posts = new ArrayList<Post>();
@@ -40,5 +43,13 @@ public class Member {
 
     public void setName(String name){
         this.name = name;
+    }
+
+    public String getPassword(){
+        return this.password;
+    }
+
+    public void setPassword(String password){
+        this.password = password;
     }
 }

@@ -31,10 +31,19 @@ public class MemberController {
         return memberService.findOne(id);
     }
 
+    @PostMapping("/members/login")
+    public Member login(@RequestBody MemberForm memberForm){
+        Member member = new Member();
+        member.setName(memberForm.name);
+        member.setPassword(memberForm.password);
+        return memberService.login(member);
+    }
+
     @PostMapping("/members")
     public ResponseEntity<Void> addMember(@RequestBody MemberForm memberForm){
         Member member = new Member();
         member.setName(memberForm.name);
+        member.setPassword(memberForm.password);
         memberService.join(member);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

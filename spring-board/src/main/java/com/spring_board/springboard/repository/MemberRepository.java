@@ -10,7 +10,7 @@ public interface MemberRepository {
 
     Member findById(Long id);
 
-    Optional<Member> findByName(String name);
+    Member findByName(String name);
 
     List<Member> findAll();
 }
