@@ -128,6 +128,7 @@ const Btn = styled.div`
   align-items: center;
   margin: 0 5px;
   border-radius: 5px;
+  cursor: pointer;
 `;
 
 const BtnContainer = styled.div`

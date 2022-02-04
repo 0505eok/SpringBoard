@@ -1,5 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../modules";
+import { loginHandler } from "../modules/login";
+import login from "../modules/login";
+import { NavLink } from "react-router-dom";
 
 const RightSidebarContainer = styled.div`
   min-width: 15%;
@@ -56,21 +61,44 @@ const Btn = styled.div`
   align-items: center;
   margin: 0 5px;
   border-radius: 5px;
+  cursor: pointer;
 `;
 
 export const RightSidebar = () => {
+
+  const state = useSelector((state:RootState) => state.login.isLogin)
+  const dispatch = useDispatch();
+
+  const onIncrease = () => {
+    dispatch(loginHandler());
+  };
+
   return (
     <RightSidebarContainer>
-      <LoginContainer>
-        <LoginBox>
-          <InputId type="text" placeholder="아이디"/>
-          <InputId type="password" placeholder="비밀번호"/>
-          <BtnBox>
-            <Btn>로그인</Btn>
-            <Btn>회원가입</Btn>
-          </BtnBox>
-        </LoginBox>
-      </LoginContainer>
+      { !state ? 
+        <LoginContainer>
+          <LoginBox>
+            <InputId type="text" placeholder="아이디"/>
+            <InputId type="password" placeholder="비밀번호"/>
+            <BtnBox>
+              <Btn onClick={onIncrease}>로그인</Btn>
+              <NavLink to="/signup">
+                <Btn>회원가입</Btn>
+              </NavLink>
+            </BtnBox>
+          </LoginBox>
+        </LoginContainer>
+        :
+        <LoginContainer>
+          <LoginBox>
+            <div style={{background: "#FFF"}}>username 님 환영합니다.</div>
+            <BtnBox>
+              <Btn onClick={onIncrease}>로그아웃</Btn>
+            </BtnBox>
+          </LoginBox>
+        </LoginContainer>
+      }
+      
     </RightSidebarContainer>
   )
 }
