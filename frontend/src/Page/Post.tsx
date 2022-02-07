@@ -1,5 +1,8 @@
 import { useLocation, useNavigate } from "react-router";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux"
+import {RootState} from '../modules'
+import {userInfoHandler} from '../modules/userInfo'
 
 interface Imember {
   id: number;
@@ -22,8 +25,10 @@ const PostContainer = styled.div`
 
 const Post = () => {
   const location = useLocation().state as Ipost;
-  const { author, title, content } = location;
+  const { author, title, content, id } = location;
   const navigate = useNavigate();
+
+  const userInfo = useSelector((state:RootState) => state.userInfo)
 
   const toUpdate = () => {
     navigate("/newpost", { state: location });
@@ -31,10 +36,11 @@ const Post = () => {
 
   return (
     <PostContainer>
+      <div>아이디 : {id}</div>
       <div>제목 : {title}</div>
       <div>작성자 : {author.name}</div>
       <div>내용 : {content}</div>
-      <Btn onClick={toUpdate}>수정</Btn>
+      <Btn onClick={toUpdate} style={userInfo.id === author.id ? {} : {display:"none"}}>수정</Btn>
     </PostContainer>
   );
 };

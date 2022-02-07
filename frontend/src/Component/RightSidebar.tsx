@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../modules";
 import { loginHandler } from "../modules/login";
 import login from "../modules/login";
 import { NavLink } from "react-router-dom";
+import { userInfoHandler } from "../modules/userInfo";
 
 const RightSidebarContainer = styled.div`
   min-width: 15%;
@@ -66,22 +67,59 @@ const Btn = styled.div`
 
 export const RightSidebar = () => {
 
-  const state = useSelector((state:RootState) => state.login.isLogin)
+  const [userId, setUserId] = useState('')
+  const [password, setPassword] = useState('')
+
+  const isLogin = useSelector((state:RootState) => state.login.isLogin)
+  const userInfo = useSelector((state:RootState) => state.userInfo)
   const dispatch = useDispatch();
 
-  const onIncrease = () => {
-    dispatch(loginHandler());
+  const loginer = async() => {
+    const res = await fetch("http://13.124.246.173:8080/members/login", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify({ name: userId, password }),
+    });
+    if (res.ok) {
+      // window.location.href = '/'
+      const data = await res.json()
+      dispatch(userInfoHandler(data.id, data.name))
+      dispatch(loginHandler());
+      localStorage.setItem("isLogin", "true")
+      localStorage.setItem("userId", `${data.id}`)
+      localStorage.setItem("username", `${data.name}`)
+    } else {
+      alert("잘못된 아이디 혹은 비밀번호입니다.");
+      setUserId("");
+      setPassword('');
+    }
   };
+
+  const logoutHandler = () => {
+    dispatch(loginHandler());
+    localStorage.setItem("isLogin", "false")
+    dispatch(userInfoHandler(0, 'none'))
+  }
+
+  const userIdHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserId(e.target.value)
+  }
+
+  const passwordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value)
+  }
 
   return (
     <RightSidebarContainer>
-      { !state ? 
+      { !isLogin ? 
         <LoginContainer>
           <LoginBox>
-            <InputId type="text" placeholder="아이디"/>
-            <InputId type="password" placeholder="비밀번호"/>
+            <InputId type="text" placeholder="아이디" value={userId} onChange={userIdHandler}/>
+            <InputId type="password" placeholder="비밀번호" value={password} onChange={passwordHandler}/>
             <BtnBox>
-              <Btn onClick={onIncrease}>로그인</Btn>
+              <Btn onClick={loginer}>로그인</Btn>
               <NavLink to="/signup">
                 <Btn>회원가입</Btn>
               </NavLink>
@@ -91,9 +129,9 @@ export const RightSidebar = () => {
         :
         <LoginContainer>
           <LoginBox>
-            <div style={{background: "#FFF"}}>username 님 환영합니다.</div>
+            <div style={{background: "#FFF"}}>{userInfo.name} 님 환영합니다.</div>
             <BtnBox>
-              <Btn onClick={onIncrease}>로그아웃</Btn>
+              <Btn onClick={logoutHandler}>로그아웃</Btn>
             </BtnBox>
           </LoginBox>
         </LoginContainer>

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux"
+import { RootState } from "../modules"
+import { userInfoHandler } from "../modules/userInfo"
 
 interface Imember {
   id: number;
@@ -18,15 +21,16 @@ interface Ipost {
 const NewPost = () => {
   const location = useLocation().state as Ipost;
   const [title, setTitle] = useState("");
-  const [name, setName] = useState("");
   const [content, setContent] = useState("");
+  const [postId, setPostId] = useState(-1)
+  const userInfo = useSelector((state:RootState) => state.userInfo)
 
   useEffect(() => {
     if (location !== null) {
-      const { author, title, content } = location;
+      const { author, title, content, id } = location;
       setTitle(title);
-      setName(author.name);
       setContent(content);
+      setPostId(id)
     }
   }, []);
 
@@ -34,13 +38,44 @@ const NewPost = () => {
     setTitle(e.target.value);
   };
 
-  const changeName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
-
-  const changeContent = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const changeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
+
+  const PostNew = async() => {
+    if (!location) {
+      const res = await fetch("http://13.124.246.173:8080/posts", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json;charset=utf-8",
+        },
+        // TODO : redux userId(name)
+        body: JSON.stringify({ title: title, content: content, author: userInfo.id }),
+      });
+      if (res.ok) {
+        window.location.href = '/'
+        alert('완료되었습니다.')
+      } else {
+        alert("err");
+      }
+    }
+    else {
+      const res = await fetch(`http://13.124.246.173:8080/posts/${postId}`, {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json;charset=utf-8",
+        },
+        // TODO : redux userId(name)
+        body: JSON.stringify({ title, content, author: userInfo.id }),
+      });
+      if (res.ok) {
+        window.location.href = '/'
+        alert('완료되었습니다.')
+      } else {
+        alert("err");
+      }
+    }
+  }
 
   return (
     <div style={{ padding: "7% 15% 0 15%" }}>
@@ -49,17 +84,11 @@ const NewPost = () => {
         <input type={"text"} value={title} onChange={changeTitle}></input>
       </div>
       <div>
-        username
-        <input type={"text"} value={name} onChange={changeName}></input>
-      </div>
-      <div>
         내용
-        <input type={"text"} value={content} onChange={changeContent}></input>
+        <textarea value={content} onChange={changeContent}></textarea>
       </div>
       <Btn
-        onClick={() => {
-          console.log("저장");
-        }}
+        onClick={PostNew}
       >
         저장
       </Btn>
