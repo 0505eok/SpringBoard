@@ -26,8 +26,6 @@ export const Signup = () => {
 
   const [userId, setUserId] = useState('')
   const [isUserId, setIsUserId] = useState(true)
-  const [username, setUsername] = useState('')
-  const [isName, setIsName] = useState(true)
   const [password, setPassword] = useState('')
   const [isPass, setIsPass] = useState(true)
   const [checkPass, setCheckpass] = useState('')
@@ -42,18 +40,6 @@ export const Signup = () => {
       setIsUserId(false);
     } else {
       setIsUserId(true);
-    }
-  }
-
-  const UsernameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.target.value)
-    const CheckId = (name: string): boolean => {
-      return (name.length <= 8 && name.length >= 2) || name.length === 0;
-    };
-    if (!CheckId(e.target.value)) {
-      setIsName(false);
-    } else {
-      setIsName(true);
     }
   }
 
@@ -82,6 +68,28 @@ export const Signup = () => {
     }
   }
 
+  const click = async () => {
+    // 멤버 등록해서 백엔드로 보내야함
+    if (!isUserId || !isPass || !isCheck || userId === '' || password === '' || checkPass === '') {
+      alert('필수 정보를 입력해주세요.')
+      return ;
+    }
+    const res = await fetch("http://13.124.246.173:8080/members", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify({ name: userId, password }),
+    });
+    if (res.ok) {
+      window.location.href = '/'
+      alert('회원가입이 완료되었습니다.')
+    } else {
+      alert("이미 존재하는 아이디입니다.");
+      setUserId("");
+    }
+  };
+
   return (
     <SignupContainer>
       <div style={{height: "7vh"}}>a</div>
@@ -91,13 +99,6 @@ export const Signup = () => {
           <div style={{width:"360px"}}>
             <InputValue type="text" value={userId} onChange={UserIdHandler}/>
             <Warning style={isUserId ? {display:"none"} : {}}>아이디는 8 ~ 20자 사이로 입력해주세요.</Warning>
-          </div>
-        </InputBox>
-        <InputBox>
-          <InputTitle>닉네임 :</InputTitle>
-          <div style={{width:"360px"}}>
-            <InputValue type="text" value={username} onChange={UsernameHandler}/>
-            <Warning style={isName ? {display:"none"} : {}}>닉네임은 2 ~ 8자 사이로 입력해주세요.</Warning>
           </div>
         </InputBox>
         <InputBox>
@@ -115,7 +116,7 @@ export const Signup = () => {
           </div>
         </InputBox>
         <ButtonBox>
-          <StyledButton>회원가입</StyledButton>
+          <StyledButton onClick={click}>회원가입</StyledButton>
         </ButtonBox>
       </SignupBody>
     </SignupContainer>

@@ -2,6 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
+import {useDispatch, useSelector} from "react-redux"
+import { RootState } from "../modules"
+import { userInfoHandler } from "../modules/userInfo"
 
 interface Imember {
   id: number;
@@ -23,6 +26,8 @@ const PostContainer = styled.div`
 `;
 
 const Posts = () => {
+
+  const userInfo = useSelector((state:RootState) => state.userInfo)
   const [postList, setPostList] = useState<Ipost[]>([
     {
       id: 1,
@@ -62,7 +67,12 @@ const Posts = () => {
   };
 
   const toUpdate = () => {
-    navigate("/newpost");
+    if (userInfo.id !== 0) {
+      navigate("/newpost");
+    }
+    else {
+      alert('로그인 후 이용하실 수 있습니다.')
+    }
   };
 
   return (

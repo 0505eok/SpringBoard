@@ -30,30 +30,8 @@ const Members = () => {
     setName(e.target.value);
   };
 
-  const click = async () => {
-    // 멤버 등록해서 백엔드로 보내야함
-    const res = await fetch("http://13.124.246.173:8080/members", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json;charset=utf-8",
-      },
-      body: JSON.stringify({ name }),
-    });
-    if (res.ok) {
-      setMemberList([...memberList, { id: memberList.length + 1, name: name }]);
-      setName("");
-    } else {
-      alert("이미 있는 이름입니다.");
-      setName("");
-    }
-  };
-
   return (
     <MemberContainer>
-      <AddMember>
-        <input type="text" onChange={addName} value={name} />
-        <button onClick={click}>등록</button>
-      </AddMember>
       <MemberList>
         <ul>
           {memberList.map((member: Imember) => {
